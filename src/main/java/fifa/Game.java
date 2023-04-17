@@ -1,121 +1,103 @@
 package fifa;
 
+import java.util.ArrayList;
+
 import javafx.animation.AnimationTimer;
-import javafx.event.EventHandler;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.Scene;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Game {
 
-    boolean SHOW_HITBOX = false;
-    private Scene scene;
+	// Boolean flag to toggle hitbox visibility
+	boolean SHOW_HITBOX = false;
+	
+	private Scene scene;
+	private ArrayList<Player> players = new ArrayList<>(); // List to store players
+	private Vector[] startingPositions = new Vector[3]; // Array to store starting positions of players
+	private CollisionDetection CDsystem; // Collision detection system
+	private Ball ball; // Ball object
+	private KeyboardInput kbInput; // Keyboard input handler
+	private Logic gameLogic; // Game logic handler
 
-    private Player[] players = new Player[3];
-    private Vector[] startingPositions = new Vector[3];
+	public Game(Stage stage, String[] names, Color[] colors) {
 
-    private CollisionDetection CDsystem;
-    private Ball ball;
-    private KeyboardInput kbInput;
-    private Logic gameLogic;
+		Group root = new Group();
 
-    public Game(Stage stage, String[] names, Color[] colors) {
+		Elements elm = new Elements();
+		PlayField field = new PlayField(elm, colors);
 
-        Group root = new Group();
+		final double PLAYER_DISTANCE_FROM_CENTER = App.HEIGHT / 3;
 
-        Elements elm = new Elements();
-        PlayField field = new PlayField(elm, colors);
+		Vector posDefault = new Vector(field.ground.getCenterX(), field.ground.getCenterY());
 
-        final double PLAYER_DISTANCE_FROM_CENTER = App.HEIGHT / 3;
+		startingPositions[0] = new Vector(0, PLAYER_DISTANCE_FROM_CENTER);
+		startingPositions[1] = Utils.rotate(startingPositions[0], 2 * Math.PI / 3);
+		startingPositions[2] = Utils.rotate(startingPositions[0], -2 * Math.PI / 3);
 
-        Vector posDefault = new Vector(field.ground.getCenterX(), field.ground.getCenterY());
+		// Create player objects and add them to players list
+		for (int i = 0; i < 3; i++)
+			players.add(new Player(elm, startingPositions[i], colors[i], field.ground, names[i]));
 
-        startingPositions[0] = new Vector(0, PLAYER_DISTANCE_FROM_CENTER);
-        startingPositions[1] = Utils.rotate(startingPositions[0], 2 * Math.PI / 3);
-        startingPositions[2] = Utils.rotate(startingPositions[0], -2 * Math.PI / 3);
+		ball = new Ball(elm, posDefault, field.ground);
 
-        startingPositions[0].add(posDefault);
-        startingPositions[1].add(posDefault);
-        startingPositions[2].add(posDefault);
+		Hitboxes hitboxes = new Hitboxes(field);
 
-        for(int i = 0; i < 3; i++)
-            players[i] = new Player(elm, startingPositions[i], colors[i],
-            field.ground, names[i]);
+		if (SHOW_HITBOX)
+			hitboxes.showHitboxes(elm.getElements());
 
+		gameLogic = new Logic(10, elm, players.get(0), players.get(1), players.get(2), ball);
+		kbInput = new KeyboardInput(gameLogic, players.toArray(new Player[0]));
 
-        ball = new Ball(elm, posDefault, field.ground);
+		CDsystem = new CollisionDetection(hitboxes.border, gameLogic, hitboxes);
 
-        Hitboxes hitboxes = new Hitboxes(field);
+		CDsystem.addStatic(hitboxes.getElementsCollection());
 
-        if (SHOW_HITBOX)
-            hitboxes.showHitboxes(elm.getElements());
+		CDsystem.addDynamic(ball);
+		CDsystem.addDynamic(players.get(0));
+		CDsystem.addDynamic(players.get(1));
+		CDsystem.addDynamic(players.get(2));
 
-        gameLogic = new Logic(10, elm, players[0], players[1], players[2], ball);
-        kbInput = new KeyboardInput(gameLogic, players);
+		root.getChildren().addAll(elm.getElements());
 
-        CDsystem = new CollisionDetection(hitboxes.border, gameLogic, hitboxes);
+		this.scene = stage.getScene();
+		stage.getScene().setRoot(root);
+		stage.show();
 
-        CDsystem.addStatic(hitboxes.getElementsCollection());
+		setGameLoop();
+	}
 
-        CDsystem.addDynamic(ball);
-        CDsystem.addDynamic(players[0]);
-        CDsystem.addDynamic(players[1]);
-        CDsystem.addDynamic(players[2]);
+	// Method to set up the game loop
+	private void setGameLoop() {
+		scene.setOnKeyPressed(event -> kbInput.setInputOnKeyPressed(event.getCode()));
 
+		scene.setOnKeyReleased(event -> kbInput.setInputOnKeyReleased(event.getCode()));
 
-        root.getChildren().addAll(elm.getElements());
+		AnimationTimer timer = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				// Update players, collision detection, game logic, and ball
+				for (Player p : players) {
+					p.update();
+				}
 
-        this.scene = stage.getScene();
-        stage.getScene().setRoot(root);
-        stage.show();
+				CDsystem.collisionChecks();
+				gameLogic.resolveLogic();
+				ball.update();
+			}
+		};
 
-        setGameLoop();
-    }
+		timer.start();
+	}
 
-    private void setGameLoop() {
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                // Set boolean values for the players
-                KeyCode code = event.getCode();
-                kbInput.setInputOnKeyPressed(code);
-            }
-        });
+	// Method to pause/reset the game
+	public void pauseResetGame() {
+		// Implementation for pausing/resetting the game
+	}
 
-        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                KeyCode code = event.getCode();
-                kbInput.setInputOnKeyReleased(code);
-            }
-        });
-
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                
-                for(Player p: players) {
-                    p.update();
-                }
-
-                CDsystem.collisionChecks();
-                gameLogic.resolveLogic();
-                ball.update();
-            }
-        };
-
-        timer.start();
-        return;
-    }
-
-    public void pauseResetGame() {
-
-    }
-
-    public void resumeGame() {
-
-    }
+	// Method to resume the game
+	public void resumeGame() {
+		// Implementation for resuming the game
+	}
 }
