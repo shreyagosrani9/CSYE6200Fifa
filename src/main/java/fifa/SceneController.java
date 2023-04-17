@@ -16,21 +16,24 @@ public class SceneController {
     private Stage stage;
     private Parent root;
     
-    private String css = this.getClass().getResource("/styling/style.css").toExternalForm();
+    private String css = getClass().getResource("/styling/style.css").toExternalForm();
 
     private Game game;
 
     public void startGame(ActionEvent event) throws IOException {
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 
+        // Get text fields for player names
         TextField name1 = (TextField)stage.getScene().lookup("#namePicker1");
         TextField name2 = (TextField)stage.getScene().lookup("#namePicker2");
         TextField name3 = (TextField)stage.getScene().lookup("#namePicker3");
         
+        // Get color pickers for player colors
         ColorPicker color1 = (ColorPicker)stage.getScene().lookup("#colorPicker1");
         ColorPicker color2 = (ColorPicker)stage.getScene().lookup("#colorPicker2");
         ColorPicker color3 = (ColorPicker)stage.getScene().lookup("#colorPicker3");
 
+        // Extract names and colors from text fields and color pickers
         String[] names = new String[3];
         Color[] colors = new Color[3];
 
@@ -42,6 +45,7 @@ public class SceneController {
         colors[1] = color2.getValue();
         colors[2] = color3.getValue();
 
+        // Create a new Game object with extracted data
         game = new Game(stage, names, colors);
     }
 
@@ -58,22 +62,27 @@ public class SceneController {
     }
 
     private void setScene(String fxml, ActionEvent event) throws IOException {
+        // Load new FXML file
         root = FXMLLoader.load(getClass().getResource(fxml));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        // Set new root and add CSS style sheet
         stage.getScene().setRoot(root);
         stage.getScene().getStylesheets().add(css);
         stage.show();
     }
     
     public void handleCloseButtonAction(ActionEvent event) {
+        // Close the stage when close button is clicked
         ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
     }
 
     public void resumeGame(ActionEvent event) {
+        // Resume the game
         game.resumeGame();
     }
 
     public void resetGame(ActionEvent event) {
+        // Pause and reset the game
         game.pauseResetGame();
     }
 }
