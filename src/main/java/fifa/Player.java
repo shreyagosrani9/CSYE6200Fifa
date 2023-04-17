@@ -6,12 +6,11 @@ import javafx.scene.shape.Circle;
 
 public class Player extends Ball {
 
-    // Object behaviour attributes
-    int maxSpeed = 3;
+    // Object behavior attributes
+    int maximumSpeed = 3;
     double airResistance = 0.07;
     double acceleration = 0.2;
     double mass = 10;
-    //
 
     public boolean none, shooting, goNorth, goSouth, goEast, goWest;
 
@@ -23,8 +22,8 @@ public class Player extends Ball {
 
         this.name = name;
 
-        position = new Vector(startPos.x, startPos.y);
-        vel = new Vector(0, 0);
+        position = new Vector(startPos.xaxis, startPos.yaxis);
+        velocity = new Vector(0, 0);
         this.startPosition = startPos;
 
         ball = new Circle(0f, 0f, size);
@@ -36,37 +35,43 @@ public class Player extends Ball {
         setCenter(field);
     }
 
-    // --------- Single use methods ---------
+    // --------- Single-use methods ---------
 
+    /**
+     * Update method that handles player movement and behavior.
+     */
     public void update() {
-        
-        if (Math.abs(vel.y) < maxSpeed) {
 
+        // Update vertical velocity (y-axis)
+        if (Math.abs(velocity.yaxis) < maximumSpeed) {
             if (goNorth)
-                vel.y -= acceleration;
+                velocity.yaxis -= acceleration;
             if (goSouth)
-                vel.y += acceleration;
+                velocity.yaxis += acceleration;
         }
-        if (Math.abs(vel.x) < maxSpeed) {
 
+        // Update horizontal velocity (x-axis)
+        if (Math.abs(velocity.xaxis) < maximumSpeed) {
             if (goEast)
-                vel.x += acceleration;
+                velocity.xaxis += acceleration;
             if (goWest)
-                vel.x -= acceleration;
+                velocity.xaxis -= acceleration;
         }
 
+        // Apply air resistance when player is not moving
         if (none) {
-            if (vel.x > 0)
-                vel.x -= airResistance;
-            if (vel.x < 0)
-                vel.x += airResistance;
-            if (vel.y > 0)
-                vel.y -= airResistance;
-            if (vel.y < 0)
-                vel.y += airResistance;
+            if (velocity.xaxis > 0)
+                velocity.xaxis -= airResistance;
+            if (velocity.xaxis < 0)
+                velocity.xaxis += airResistance;
+            if (velocity.yaxis > 0)
+                velocity.yaxis -= airResistance;
+            if (velocity.yaxis < 0)
+                velocity.yaxis += airResistance;
         }
 
-        if (makeShootable) {
+        // Update stroke color based on shooting state
+        if (shooting) {
             ball.setStroke(Color.DARKORANGE);
         } else if (!shooting) {
             ball.setStroke(Color.BLACK);
@@ -74,10 +79,16 @@ public class Player extends Ball {
             ball.setStroke(Color.WHITE);
         }
 
-        move(vel.x, vel.y);
+        // Move player based on velocity and redraw
+        move(velocity.xaxis, velocity.yaxis);
         draw();
     }
 
+    /**
+     * Check if the player is in shooting state.
+     *
+     * @return true if the player is in shooting state, false otherwise.
+     */
     public boolean isShooting() {
         return shooting;
     }
