@@ -13,79 +13,80 @@ public class KeyboardInput {
     public KeyboardInput(Logic logic, Player[] players) {
         this.logic = logic;
         this.players = players;
-        for (int i = 0; i < 3; i++)
-            fillKeycodeArray(i);
+        for (int i = 0; i < 3; i++) {
+            fillKeyCodeArray(i); 
+        }
     }
 
     public void setInputOnKeyPressed(KeyCode code) {
         for (int i = 0; i < 3; i++) {
+            Player player = players[i]; 
+            // Removed redundant array access
 
-            players[i].none = true;
+            player.none = true;
 
             if (code == keys[i][0]) { // UP
-                players[i].goNorth = true;
-                players[i].none = false;
+                player.goNorth = true;
+                player.none = false;
             }
 
             if (code == keys[i][1]) { // DOWN
-                players[i].goSouth = true;
-                players[i].none = false;
+                player.goSouth = true;
+                player.none = false;
             }
 
             if (code == keys[i][2]) { // LEFT
-                players[i].goWest = true;
-                players[i].none = false;
+                player.goWest = true;
+                player.none = false;
             }
 
             if (code == keys[i][3]) { // RIGHT
-                players[i].goEast = true;
-                players[i].none = false;
+                player.goEast = true;
+                player.none = false;
             }
 
             if (code == keys[i][4]) { // SHOOT
-                players[i].shooting = true;
-                players[i].none = false;
+                player.shooting = true;
+                player.none = false;
             }
 
-            if(code == KeyCode.P)
+            if (code == KeyCode.P) {
                 logic.displayPause();
+            }
         }
     }
 
     public void setInputOnKeyReleased(KeyCode code) {
         for (int i = 0; i < 3; i++) {
+            Player player = players[i]; 
+            // Removed redundant array access
 
-
-            players[i].none = true;
+            player.none = true;
 
             if (code == keys[i][0]) { // UP
-                players[i].goNorth = false;
-                players[i].none = true;
+                player.goNorth = false;
             }
 
             if (code == keys[i][1]) { // DOWN
-                players[i].goSouth = false;
-                players[i].none = true;
+                player.goSouth = false;
             }
 
             if (code == keys[i][2]) { // LEFT
-                players[i].goWest = false;
-                players[i].none = true;
+                player.goWest = false;
             }
 
             if (code == keys[i][3]) { // RIGHT
-                players[i].goEast = false;
-                players[i].none = true;
+                player.goEast = false;
             }
 
             if (code == keys[i][4]) { // SHOOT
-                players[i].shooting = false;
-                players[i].none = true;
+                player.shooting = false;
             }
         }
     }
 
-    private void fillKeycodeArray(int i) {
+    private void fillKeyCodeArray(int i) { 
+    	// Changed method name from "fillKeycodeArray" to "fillKeyCodeArray"
         switch (i) {
             case 0:
                 keys[i][0] = KeyCode.UP;
