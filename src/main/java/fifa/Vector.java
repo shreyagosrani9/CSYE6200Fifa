@@ -1,27 +1,31 @@
 package fifa;
 
 public class Vector {
-    public double x;
-    public double y;
+	public double xaxis;
+	public double yaxis;
 
-    public Vector(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
+	//Constructor of vector 
+	public Vector(double x, double y) {
+		this.xaxis = x;
+		this.yaxis = y;
+	}
 
-    public Vector add(Vector n) {
-        x += n.x;
-        y += n.y;
-        return this;
-    }
+	// Method to add another vector to this vector
+	public Vector add(Vector n) {
+		xaxis += n.xaxis;
+		yaxis += n.yaxis;
+		return this;
+	}
 
-    public Vector extend(double a) {
-        x *= a;
-        y *= a;
-        return this;
-    }
+	// Method to extend the length of this vector by a scalar factor
+	public Vector extend(double a) {
+		xaxis *= a;
+		yaxis *= a;
+		return this;
+	}
 
-    public double getLength() {
-        return Math.sqrt(x * x + y * y);
-    }
+	// Method to calculate the length of this vector
+	public double getLength() {
+		return Math.sqrt(xaxis * xaxis + yaxis * yaxis);
+	}
 }
