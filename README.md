@@ -1,6 +1,6 @@
 OOD Final Project<br>
 
-Team ACE/
-Shreya Gosrani/
-Kush Salaskar/
-Vrushank Hiremath/
+Team ACE<br>
+Shreya Gosrani<br>
+Kush Salaskar<br>
+Vrushank Hiremath<br>
