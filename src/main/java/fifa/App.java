@@ -10,10 +10,12 @@ import javafx.stage.Stage;
 
 public class App extends Application {
 
-    public static boolean DISPLAYFULLSCREEN = true;
-
-    public static double WIDTH = 1280;
-    public static double HEIGHT = 720;
+    public static boolean DISPLAY_FULL_SCREEN = true; 
+    // Flag to determine if the window should be displayed in full screen
+    public static double WIDTH = 1280; 
+    // Default width of the window
+    public static double HEIGHT = 720; 
+    // Default height of the window
 
     public static void main(String[] args) {
         launch(args);
@@ -22,38 +24,57 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Parent base = FXMLLoader.load(getClass().getResource("/menu/start.fxml"));
+        Parent base = FXMLLoader.load(getClass().getResource("/menu/start.fxml")); 
+        // Load the FXML file for the base UI
 
-        Scene sc = new Scene(base);
-        sc.getStylesheets().add(getClass().getResource("/styling/style.css").toExternalForm());
-        prepareGameWindow(stage, sc, "/icon/icon.png");
+        Scene scene = new Scene(base); 
+        // Create a new scene with the base UI
+        scene.getStylesheets().add(getClass().getResource("/styling/style.css").toExternalForm()); 
+        // Load the CSS styles for the scene
+        prepareGameWindow(stage, scene, "/icon/icon.png"); 
+        // Prepare the game window settings
 
-        stage.setScene(sc);
-        stage.show();
+        stage.setScene(scene); 
+        // Set the scene to the stage
+        stage.show(); 
+        // Show the stage
     }
 
     private void prepareGameWindow(Stage stage, Scene scene, String pathToIcon) {
-        if (App.DISPLAYFULLSCREEN) {
-            App.WIDTH = javafx.stage.Screen.getPrimary().getBounds().getWidth();
-            App.HEIGHT = javafx.stage.Screen.getPrimary().getBounds().getHeight();
+        if (DISPLAY_FULL_SCREEN) {
+            WIDTH = javafx.stage.Screen.getPrimary().getBounds().getWidth(); 
+            // Set window width to the width of the primary screen
+            HEIGHT = javafx.stage.Screen.getPrimary().getBounds().getHeight(); 
+            // Set window height to the height of the primary screen
         }
 
-        Image icon = new Image(getClass().getResource(pathToIcon).toString());
+        Image icon = new Image(getClass().getResource(pathToIcon).toString()); 
+        // Load the icon image
 
-        stage.getIcons().add(icon);
-        stage.setTitle("FIFA 2023");
+        stage.getIcons().add(icon); 
+        // Set the icon for the stage
+        stage.setTitle("FIFA 2023"); 
+        // Set the title of the stage
 
-        stage.setWidth(WIDTH);
-        stage.setHeight(HEIGHT);
+        stage.setWidth(WIDTH); 
+        // Set the width of the stage
+        stage.setHeight(HEIGHT); 
+        // Set the height of the stage
 
-        stage.setFullScreen(DISPLAYFULLSCREEN);
-        stage.setResizable(false);
-        stage.setAlwaysOnTop(true);
-        stage.setMinWidth(1280);
-        stage.setMinHeight(720);
+        stage.setFullScreen(DISPLAY_FULL_SCREEN); 
+        // Set the stage to full screen mode
+        stage.setResizable(false); 
+        // Disable resizing of the stage
+        stage.setAlwaysOnTop(true); 
+        // Set the stage to always on top
+        stage.setMinWidth(1280); 
+        // Set the minimum width of the stage
+        stage.setMinHeight(720); 
+        // Set the minimum height of the stage
 
         stage.setFullScreenExitKeyCombination(KeyCombination.valueOf("q"));
-        stage.setFullScreenExitHint("To exit full screen, press Q.");
+        // Set the key combination to exit full screen
+        stage.setFullScreenExitHint("To exit full screen, press Q."); 
+        // Set the hint text for exiting full screen
     }
-
 }
