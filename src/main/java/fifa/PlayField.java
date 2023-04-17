@@ -27,30 +27,35 @@ public class PlayField {
 	public Polyline goalB;
 	public Polyline goalY;
 	public Polyline goalR;
-
 	public Circle ground;
 	public Polyline goal;
 	public Polygon field;
 
 	public PlayField(Elements list, Color[] colors) {
+		// Constructor of the PlayField class
+        // It creates the goals, ground, field, and other elements of the playfield
+
+        // Create blue, yellow and red goal and ground color 
 
 		goalB = createGoal(GoalType.BLUE, colors);
 		goalY = createGoal(GoalType.YELLOW, colors);
 		goalR = createGoal(GoalType.RED, colors);
-
 		ground = new Circle(W2, H2, H2, Color.GRAY);
 
+		// Create the field
 		field = new Polygon();
 		field.getPoints().addAll(W2 - H2, H2, W2 - H4, H2 + SQ2, W2 + H4, H2 + SQ2, W2 + H2, H2, W2 + H4,
 				H2 - (H2 * sqrt(3) / 2), W2 - H4, H2 - SQ2);
 		field.setFill(Color.web("#008000", 1.0));
 		field.setStroke(Color.WHITE);
 		field.setStrokeWidth(5);
-
+		
+		// Create the circle in the middle of the field
 		Circle circle = new Circle(W2, H2, HEIGHT / 20, Color.TRANSPARENT);
 		circle.setStroke(Color.WHITE);
 		circle.setStrokeWidth(2);
 
+		// Create the lines on the field
 		Line leftLine = new Line(W2, H2, midpointX(W2 - H2, W2 - H4), midpointY(H2, H2 - SQ2));
 		Line rightLine = new Line(W2, H2, midpointX(W2 + H2, W2 + H4), midpointY(H2, H2 - SQ2));
 		Line downLine = new Line(W2, H2, midpointX(W2 + H4, W2 - H4), H2 + (H2 * sqrt(3) / 2));
@@ -61,6 +66,7 @@ public class PlayField {
 		downLine.setStroke(Color.WHITE);
 		downLine.setStrokeWidth(2);
 
+		// Create the arcs on the field
 		int ARCLENGTH = 180;
 
 		Arc leftArc = new Arc(midpointX(W2 - H2, W2 - H4), midpointY(H2, H2 - SQ2), H5, H5, 240, WIDTH / 6.7);
@@ -83,7 +89,6 @@ public class PlayField {
 
 		list.add(ground);
 		list.add(field);
-
 		list.add(circle);
 		list.add(leftLine);
 		list.add(rightLine);
@@ -91,7 +96,6 @@ public class PlayField {
 		list.add(leftArc);
 		list.add(rightArc);
 		list.add(downArc);
-
 		list.add(goalB);
 		list.add(goalY);
 		list.add(goalR);
@@ -111,6 +115,7 @@ public class PlayField {
 			goal.setFill(colors[1]);
 			goal.setStrokeWidth(5);
 			break;
+			
 		case YELLOW:
 			goal.getPoints().addAll(midpointX(W2 + H2, midpointX(W2 + H2, W2 + H4)) - HEIGHT / 20,
 					midpointY(H2, midpointY(H2, H2 - SQ2)) + HEIGHT / 40,
@@ -121,6 +126,7 @@ public class PlayField {
 			goal.setFill(colors[2]);
 			goal.setStrokeWidth(5);
 			break;
+			
 		case RED:
 			goal.getPoints().addAll(midpointX(W2 + H4, midpointX(W2 + H4, W2 - H4)),
 					H2 + (H2 * sqrt(3) / 2) - HEIGHT / 20, midpointX(W2 + H4, midpointX(W2 + H4, W2 - H4)),
