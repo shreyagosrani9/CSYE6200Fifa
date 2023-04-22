@@ -15,6 +15,9 @@ The game includes several exciting features to enhance the overall gaming experi
 <li>Real-time match updates: Users can see real-time updates on the match, including scores, time remaining.
 </ul>
 
+<h3> UML Diagram </h3>
+<img width="551" alt="image" src="https://user-images.githubusercontent.com/30554781/233810703-9d45c4e3-7d72-4f59-a71f-5ef1a458e28f.png">
+
 <h3>Technologies</h3><br>
 The game is developed using JavaFX, a cross-platform technology that allows for easy access on multiple devices. The use of JavaFX ensures that the game is accessible to a wide range of users and can be enjoyed from the comfort of their homes.
 
